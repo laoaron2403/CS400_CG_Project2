@@ -6,6 +6,6 @@ import java.io.Reader;
 
 public interface RoomDataReaderInterface {
 	
-	public List<RoomInterface> readDataSet(Reader inputFileReader) throws FileNotFoundException, IOException, DataFormatException;
+	public List<Room> readDataSet(Reader inputFileReader) throws FileNotFoundException, IOException, DataFormatException;
 
 }
