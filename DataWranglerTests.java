@@ -176,4 +176,51 @@ public class DataWranglerTests {
 		}
 		
 	}
+	/**
+	 * This test method tests if the the RoomDataReader successfully add a new room with respective properties
+	 */
+	@Test
+	public void testAdding()
+	{
+		//preparation phase
+	    try {
+			  FileWriter myWriter = new FileWriter("roomtemp.csv");
+			  myWriter.write("room_id, name, host_id, host_name, neighborhood, room_type, price\n"+
+				"2539, Clean & quiet apt home by the park, 2787, John, Kensington, Private room, 149\n"+
+				"2595, Skylit Midtown Castle, 2845, Jennifer, Midtown, Entire home/apt, 225\n"+
+				"12048, LowerEastSide apt share shortterm 1, 7549, Ben, Lower East Side, Shared room, 40\n");
+			  myWriter.close();
+			  System.out.println("Successfully wrote to the file.");
+	    } catch (IOException e) {
+		      System.out.println("An error occurred.");
+		      e.printStackTrace();
+	    }
+
+	    try { 
+	    	//writing
+		    RoomDataReader readerToTest = new RoomDataReader();
+		    String[] newRoom = {"1145","Crib at the hood","1919","Lamar","Grove Street","Private room","81"};
+		    FileWriter roomWriter = new FileWriter("roomtemp.csv",true);
+		    readerToTest.addRoom(roomWriter, newRoom);
+		    
+	    	//checking
+	    	Reader reader = new FileReader("roomtemp.csv");
+			List<Room> roomList = readerToTest.readDataSet(reader);
+			if(!roomList.get(3).getRoomId().equals("1145") ||
+					!roomList.get(3).getName().equals("Crib at the hood") ||
+					!roomList.get(3).getHostId().equals("1919") ||
+					!roomList.get(3).getHostName().equals("Lamar") &&
+					!roomList.get(3).getNeighborhoodName().equals("Grove Street") ||
+					!roomList.get(3).getRoomType().equals("Private room") ||
+					roomList.get(3).getPrice() != 81)
+				fail("Fail to add the new room");
+		} catch (DataFormatException e) {
+			e.printStackTrace();
+			fail("Fail to add the new room due to data format");
+		}
+	    catch (IOException e) {
+			e.printStackTrace();
+			fail("Fail to add the new room");
+		} 
+	}
 }
