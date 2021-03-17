@@ -5,34 +5,34 @@ run: prepareRun clean
 prepareRun: compile
   java Fronend
 
-test: compile testData testBackend testFrontend clean
+test: compile testData BackEndDeveloperTests testFrontend clean
 
 compile: prepareFrontend prepareBackEnd prepareData
 
 # test
 
 ## test Data
-testData: prepareData testHotelAndHotelDataReader.class
+testData: prepareData DataWranglerTests.java
   java -jar junit5.jar --class-path . --scan-classpath
-  $(RM) testHotelAndHotelDataReader.class
+  $(RM) DataWranglerTests.class
 
-testHotelAndHotelReader.class: testHotelAndHotelReader.java
-  javac -cp .:junit5.jar testHotelAndHotelReader.java -Xlint
+DataWranglerTests.class: DataWranglerTests.java
+  javac -cp .:junit5.jar DataWranglerTests.java -Xlint
  
 ## test Backend
-testBackend: prepareBackend testBackend.class
+BackEndDeveloperTests: prepareBackend BackEndDeveloperTests.class
   java -jar junit5.jar --class-path . --scan-classpath
-  $(RM) testBackend.class
+  $(RM) BackEndDeveloperTests.class
 
-testBackend.class: testBackend.java
-  javac -cp .:junit5.jar testBackend.java -Xlint
+BackEndDeveloperTests.class: BackEndDeveloperTests.java
+  javac -cp .:junit5.jar BackEndDeveloperTests.java -Xlint
   
 ## testFrontend
-testFrontend: prepareFrontend testFrontend.class
+testFrontend: prepareFrontend FrontendDeveloperTests.class
   java -jar junit5.jar --class-path . --scan-classpath
 
-testFrontend.class: testFrontend.java
-  javac -cp .:junit5.jar testFrontend.java -Xlint
+testFrontend.class: FrontendDeveloperTests.java
+  javac -cp .:junit5.jar FrontendDeveloperTests.java -Xlint
 
 # Frontend
 prepareFrontend: prepareBackend Frontend.class
@@ -53,19 +53,19 @@ BackendInterface.class: BackendInterface.java
   javac BackendInterface.java
   
 # DataWrangler
-prepareData: HotelDataReader.class Hotel.class
+prepareData: RoomDataReader.class Room.class
 
-HotelDataReader.class: HotelDataReader.java HotelDataReaderInterface.class
-  javac HotelDataReader.java
+RoomDataReader.class: RoomDataReader.java RoomDataReaderInterface.class
+  javac RoomDataReader.java
   
-HotelDataReaderInterface.class: HotelDataReaderInterface.java
-  javac HotelDataReaderInterface.java
+RoomDataReaderInterface.class: RoomDataReaderInterface.java
+  javac RoomDataReaderInterface.java
 
-Hotel.class: Hotel.java HotelInterface.class
-  javac Hotel.java
+Room.class: Room.java RoomInterface.class
+  javac Room.java
   
-HotelInterface.class: HotelInterface.java
-  javac HotelInterface.java
+RoomInterface.class: RoomInterface.java
+  javac RoomInterface.java
 
 # Clean all class files
 clean:
