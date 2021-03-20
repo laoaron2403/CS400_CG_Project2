@@ -1,20 +1,24 @@
 import java.util.List;
 
+/**
+ * BackendInterface for front end to use
+ * @author nitit
+ */
 public interface BackendInterface {
-  public void selectNeighborhood(String neighborhood);
-  public void unselectNeighborhood(String neighborhood);
-  public List<String> getNeighborhoods();
-  public int getNumberOfRooms();
-  public List<String> getAllNeighborhoods();
-  public List<RoomInterface> getThreeRooms(int startingIndex);
-  public void setPriceLowerBound(int price);
-  public void setPriceUpperBound(int price);
+  public void selectNeighborhood(String neighborhood); //Add neighborhood to considered list
+  public void unselectNeighborhood(String neighborhood); //Remove neighborhood from considered list
+  public List<String> getNeighborhoods(); //Return the list of current neighborhood
+  public int getNumberOfRooms(); //Return the number of room in the list
+  public List<String> getAllNeighborhoods(); //Return all type of neighborhood
+  public List<RoomInterface> getThreeRooms(int startingIndex); //Return three top on the list
+  public void setPriceLowerBound(int price); //Set lower bound
+  public void setPriceUpperBound(int price); //Set upper bound
   public List<Integer> getPriceRange(); //Return list of two integer. Highest and lowest 
                                         //This method search for whole list
-                                        //**Not from current list**
-  public void selectRoomType(String type);
-  public void unselectRoomType(String type);
-  public List<String> getAllRoomType();
+                                        //** Not from current list **
+  public void selectRoomType(String type); //Add RoomType to considered list
+  public void unselectRoomType(String type); //Remove RoomType to considered list
+  public List<String> getAllRoomType(); //Return all type of room
 
   /**
   * Add new room to the RBT
