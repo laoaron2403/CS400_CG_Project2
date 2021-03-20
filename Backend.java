@@ -118,6 +118,7 @@ public class Backend implements BackendInterface {
      */
     public void setPriceLowerBound(int price) {
         currentBound.set(0,price);
+        update();
     }
 
     /**
@@ -126,6 +127,7 @@ public class Backend implements BackendInterface {
      */
     public void setPriceUpperBound(int price) {
         currentBound.set(1,price);
+        update();
     }
 
     /**
