@@ -44,12 +44,14 @@ public class Room implements RoomInterface{
 
 	@Override
 	public int compareTo(RoomInterface otherRoom) {
-		return this.getPrice()-otherRoom.getPrice();
+	    if(this.getPrice() != otherRoom.getPrice())
+	        return this.getPrice()-otherRoom.getPrice();
+	    return this.getName().compareTo(otherRoom.getName());
 	}
 
 	@Override
 	public boolean equals(RoomInterface otherRoom) {
-		if(this.getPrice()==otherRoom.getPrice())
+		if(this.getName().equals(otherRoom.getName()) && this.getName().equals(otherRoom.getName()))
 			return true;
 		return false;
 	}
