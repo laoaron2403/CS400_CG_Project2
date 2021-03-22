@@ -8,6 +8,8 @@
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,7 +37,7 @@ public class Frontend {
     public static void main(String[] args) {
 	Object frontend =  new Frontend();
 	try {
-	    FileReader inputFileReader = new FileReader("airbnb.csv");
+	    FileReader inputFileReader = new FileReader("/Users/yuxizheng/Downloads/airbnb.csv");
 	    ((Frontend)frontend).run(new Backend(inputFileReader));
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -93,6 +95,8 @@ public class Frontend {
             priceRangePage();
         else if (mode == 3) // Room type Page
             roomTypePage();
+        else if (mode == 4)
+            roomAdderPage();
     }
     
     /**
@@ -134,6 +138,7 @@ public class Frontend {
         System.out.println("You can naviagate to Neighborhoods selection by press n.");
         System.out.println("Or navigate to Price Ranges selection by press p.");
         System.out.println("Or navigate to Room Types selection by press t.");
+        System.out.println("Or navigate to Room Adder page by press a.");
         System.out.println("Or terminate the program by press x.");
         System.out.println("Wrong input might leads to unexpected behevior.");
         
@@ -157,6 +162,10 @@ public class Frontend {
             } else if (input.contains("t")) {
                 //Navigate to the room type page
                 mode = 3;
+                changePage = true; //To show that this come from different page
+            } else if (input.contains("a")) {
+        	//Navigate to the room adder page
+                mode = 4;
                 changePage = true; //To show that this come from different page
             } else {
                 try {
@@ -235,7 +244,11 @@ public class Frontend {
         //Use run() to navigate to another/same page
         run();
     }
-
+    
+    /**
+     * This page allows users to set price range that they are willing to pay
+     * Press s to start input upper bound and lower bound
+     */
     private void priceRangePage() {
         boolean correctInput = false;
         //Welcome message for page
@@ -244,7 +257,7 @@ public class Frontend {
         System.out.println("Please select the price range by typing number according to neighborhood.");
         
         //Display price ranges either selected or not
-        System.out.println("The current price bound is: " + backend.getPriceRange().get(0) + "$ - " + backend.getPriceRange().get(1) + "$");
+        System.out.println("The current price bound is: " + backend.getCurrentPriceRange().get(0) + "$ - " + backend.getPriceRange().get(1) + "$");
         System.out.println("----------------------------------------------");
         System.out.println("Press s to set upper bound and lower bound of price range.");
         System.out.println("Press x to navigate back to main page.");
@@ -261,7 +274,7 @@ public class Frontend {
                   System.out.print("Set upper bound: ");
                   String upper = in.nextLine();
                   int upperInt = Integer.parseInt(upper);
-                  backend.setPriceLowerBound(upperInt);
+                  backend.setPriceUpperBound(upperInt);
                   System.out.print("Set lower bound: ");
                   String lower = in.nextLine();
                   int lowerInt = Integer.parseInt(lower);
@@ -270,14 +283,24 @@ public class Frontend {
                   //This means the input is not integer. Wrong formatted!
                   correctInput = false;
                   System.out.println("The format is wrong");
-              }
+              } 
+          } else {
+              //This means the input is either s or x
+              correctInput = false;
+              System.out.println("The format is wrong");
           }
-          
         }
         //Use run() to navigate to another/same page
         run();
     }
     
+    /**
+     * This page allows users to select room type that they intended to live in
+     * The page will present all room types
+     * Before room types is the number that user would use to choose room type
+     * After room types are the status of selection
+     * Type the number will change the status
+     */
     private void roomTypePage() {
         boolean correctInput = false;
         //Welcome message for page
@@ -333,5 +356,90 @@ public class Frontend {
         run();
     }
     
-  
+    /**
+     * This page allows users to add new room
+     * Press s to start input room information
+     * new data will be load after restart the application
+     * incorrect format will stop adding and back to this page
+     */
+    private void roomAdderPage() {
+	boolean correctInput = false;
+        //Welcome message for page
+        System.out.println("Welcome to add room page!");
+        //Loop until getting correct input
+        while (!correctInput) {
+            System.out.println("Press s to start add room, or press x to back to the main page");
+            correctInput = true;
+            String input = in.nextLine();
+            if (!input.contains("x")) {
+                if (input.contains("s")) {
+                    try {
+                	String[] toWrite = new String[7];
+                	System.out.print("Room ID:");
+                	toWrite[0] = in.nextLine();
+                	Integer.parseInt(toWrite[0]); //test whether integer id
+                	//toWrite[0] = "\n" + toWrite[0];
+                	System.out.print("Name:");
+                	toWrite[1] = in.nextLine();
+                	System.out.print("Host ID:");
+                	toWrite[2] = in.nextLine();
+                	Integer.parseInt(toWrite[2]); //test whether integer input
+                	System.out.print("Host Name:");
+                	toWrite[3] = in.nextLine();
+                	System.out.print("Neighborhood:");
+                	toWrite[4] = in.nextLine();
+                	System.out.print("Room Type:");
+                	for (int i = 0; i < types.size(); i++) {
+                            System.out.print("(" + (i + 1) + "): " + types.get(i) + " ");  
+                        }
+                	toWrite[5] = in.nextLine();
+                	int temp = Integer.parseInt(toWrite[5]); //test whether input id
+                	if (temp > types.size() || temp < 0) {
+                	    throw new IllegalArgumentException("Incorrect Selection!"); 
+                	}
+                	toWrite[5] = types.get(temp-1);
+                	System.out.print("Price");
+                	toWrite[6] = in.nextLine();
+                	Integer.parseInt(toWrite[6]); //test whether input input
+                	RoomDataReader readerToWrite = new RoomDataReader();
+                	FileWriter roomWriter = new FileWriter("/Users/yuxizheng/Downloads/airbnb.csv",true);
+                	readerToWrite.addRoom(roomWriter, toWrite);
+                	afterAddPage(toWrite);
+		    } catch (Exception e) {
+			correctInput = false;
+	                System.out.println("The format is wrong");
+		    }
+        	} else {
+        	    //This means the input either s or x. Wrong formatted!
+                    correctInput = false;
+                    System.out.println("The format is wrong");
+        	}
+            } else {
+                mode = 0; //Goes back to main page if it contains x
+            }
+        }
+        //Use run() to navigate to another/same page
+        run();
+    }
+    
+    /**
+     * This page will print the information being added to the csv file
+     * @param a The input data array
+     */
+    private void afterAddPage(String[] a) {
+	clearScreen(); // Reset the screen to blank
+	System.out.println("Successfully Added, The Room Information is:");
+	System.out.println("Room ID: " + a[0]);
+	System.out.println("Name: " + a[1]);
+	System.out.println("Host ID: " + a[2]);
+	System.out.println("Host Name: " + a[3]);
+	System.out.println("Neighborhood: " + a[4]);
+	System.out.println("Room Type: " + a[5]);
+	System.out.println("Price: " + a[6]);
+	System.out.println("Your new data will load after restart this application");
+	System.out.println("Press anything to back to the main page");
+	String input = in.nextLine();
+	mode = 0;
+	run();
+    }
 }
