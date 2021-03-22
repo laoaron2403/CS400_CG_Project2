@@ -16,6 +16,8 @@ public interface BackendInterface {
   public List<Integer> getPriceRange(); //Return list of two integer. Highest and lowest 
                                         //This method search for whole list
                                         //** Not from current list **
+  public List<Integer> getCurrentPriceRange(); //Return list of two integer. Highest and lowest 
+                                               //Current bound
   public void selectRoomType(String type); //Add RoomType to considered list
   public void unselectRoomType(String type); //Remove RoomType to considered list
   public List<String> getAllRoomType(); //Return all type of room
