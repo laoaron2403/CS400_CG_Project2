@@ -113,7 +113,7 @@ public class RoomDataReader implements RoomDataReaderInterface{
 			//add every property of the room with comma and space to the csv file
 			for(int i = 0; i < newRoom.length-1; i++)
 			{
-				roomWriter.write(newRoom[i] + ", ");
+				roomWriter.write(newRoom[i] + ",");
 			}
 			//add the last property (the price) to the file and a new line to the csv file
 			roomWriter.write(newRoom[newRoom.length-1] + "\n");
