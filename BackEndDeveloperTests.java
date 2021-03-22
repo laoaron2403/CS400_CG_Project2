@@ -189,10 +189,10 @@ public class BackEndDeveloperTests {
             assertTrue(rooms.size() == 2); //Should have 2 rooms
             backend.setPriceLowerBound(500);
             rooms = backend.getThreeRooms(0);
-            System.out.println(rooms.size());
             assertTrue(rooms.size() == 0); //Should have 0 rooms
         }
         catch (Exception e) {
+            e.printStackTrace();
             fail(e.toString());
         } 
 	}
