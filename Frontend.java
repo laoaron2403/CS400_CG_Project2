@@ -1,9 +1,21 @@
+// --== CS400 File Header Information ==--
+// Name: Xizheng Yu
+// Email: xyu354@wisc.edu
+// Team: CG
+// TA: Xi Chen
+// Lecturer: Gary Dahl
+// Notes to Grader: None
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This class runs the whole program
+ * @author yuxizheng
+ */
 public class Frontend {
     //Preparation of Backend
     int mode;
@@ -12,7 +24,6 @@ public class Frontend {
     List<String> neighborhoods; // List of name of all neighborhoods
     List<String> types; // List of name of all room types
     List<Boolean> nSelect; // List of boolean whether neighborhood is selected or not
-    List<Boolean> pSelect; // List of boolean whether price ranges is selected or not
     List<Boolean> tSelect; // List of boolean whether room types is selected or not
     // Other stuff
     Scanner in; // Scanner to be used from user
@@ -31,6 +42,26 @@ public class Frontend {
 	}
     }
     
+    /**
+     * The construtor. This will do nothing but initialized all value with null. It
+     * will set those value again when you run the program.
+     */
+    public Frontend() {
+
+    }
+    
+    /**
+     * This method is taken from outside source. This would clear the terminal
+     */
+    private static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+    
+    /**
+     * This method runs this program and loads data
+     * @param backend
+     */
     public void run(BackendInterface backend) {
         mode = 0; // Set in base mode
         this.backend = backend;
@@ -41,10 +72,6 @@ public class Frontend {
         nSelect = new ArrayList<Boolean>();
         for (int i = 0; i < neighborhoods.size(); i++)
             nSelect.add(false);
-        pSelect = new ArrayList<Boolean>(); 
-        //for (int i = 0; i < 11; i++) {
-        //    
-        //}
         tSelect = new ArrayList<Boolean>(); 
         for (int i = 0; i < types.size(); i++) 
             tSelect.add(false);
@@ -64,30 +91,20 @@ public class Frontend {
             neighborhoodPage();
         else if (mode == 2) // Price range Page
             priceRangePage();
-        else if (mode == 3); // Room type Page
+        else if (mode == 3) // Room type Page
             roomTypePage();
     }
     
     /**
-     * The construtor. This will do nothing but initialized all value with null. It
-     * will set those value again when you run the program.
+     * This is the main page of the program, include functions of:
+     * presenting top three rooms that user chose
+     * navigate to price range page/neighborhood page/room type page
+     * and terminate program
      */
-    public Frontend() {
-
-    }
-    
-    /**
-     * This method is taken from outside source. This would clear the terminal
-     */
-    private static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-    
     private void mainPage() {
         //If come from other page, it will reset the position
         if (changePage)
-          position = 1;
+            position = 1;
         changePage = false;
         boolean correctInput = false; //A boolean checking whether input is correct or not
         
@@ -102,7 +119,9 @@ public class Frontend {
         if (!(curList == null || backend.getNumberOfRooms() == 0 || curList.size() == 0)) {
             for (int i = 0; i < curList.size(); i++) {
                 RoomInterface room = curList.get(i); //Get ith room
-                System.out.println("(" + (position + i) + ") " + room.getRoomId() + room.getName() + room.getHostId() + room.getHostName() + room.getNeighborhoodName() + room.getRoomType() + room.getPrice());
+                System.out.println("(" + (position + i) + ") " + room.getRoomId() + ", " +
+                	room.getName() + ", "+ room.getHostId() + ", "+ room.getHostName() + ", "+ 
+                	room.getNeighborhoodName() + ", "+ room.getRoomType() + ", "+ room.getPrice());
             }
         } else {
           //Error message in case it return null list or list with 0 members.
@@ -115,13 +134,13 @@ public class Frontend {
         System.out.println("You can naviagate to Neighborhoods selection by press n.");
         System.out.println("Or navigate to Price Ranges selection by press p.");
         System.out.println("Or navigate to Room Types selection by press t.");
-        System.out.println("Or press x to terminate the program.");
-        System.out.println("Wrong input might leads to unexpected behevior");
+        System.out.println("Or terminate the program by press x.");
+        System.out.println("Wrong input might leads to unexpected behevior.");
         
         //Loop until we get the correct input
         while (!correctInput) {
             correctInput = true; //Set to true. Will change to false if format is wrong
-            System.out.println("Please input the command. x back to main page");
+            System.out.println("Please input the command:");
             String input = in.nextLine();
             if (input.contains("x")) {
                 //If contains x, then it would display bye bye message and return out
@@ -135,7 +154,7 @@ public class Frontend {
                 //Navigate to the price ranges page
                 mode = 2;
                 changePage = true; //To show that this come from different page
-            } if (input.contains("t")) {
+            } else if (input.contains("t")) {
                 //Navigate to the room type page
                 mode = 3;
                 changePage = true; //To show that this come from different page
@@ -150,11 +169,17 @@ public class Frontend {
                 }
             }
         }
-        
         //Use run() to navigate to another/same page
         run();
     }
     
+    /**
+     * This page allows users to select neighborhoods that they intended to live in
+     * The page will present all neighborhoods
+     * Before neighborhood names is the number that user would use to choose neighborhoods
+     * After neighborhood names are the status of selection
+     * Type the number will change the status
+     */
     private void neighborhoodPage() {
         boolean correctInput = false;
         //Welcome message for page
@@ -219,7 +244,7 @@ public class Frontend {
         System.out.println("Please select the price range by typing number according to neighborhood.");
         
         //Display price ranges either selected or not
-        
+        System.out.println("The current price bound is: " + backend.getPriceRange().get(0) + "$ - " + backend.getPriceRange().get(1) + "$");
         System.out.println("----------------------------------------------");
         System.out.println("Press s to set upper bound and lower bound of price range.");
         System.out.println("Press x to navigate back to main page.");
@@ -227,9 +252,7 @@ public class Frontend {
         //Loop until getting correct input
         while (!correctInput) {
           correctInput = true;
-          System.out.println("Please input the number for price range you want select.");
-          System.out.println("Or input s to set upper bound and lower bound.");
-          System.out.println("Or input x back to main page.");
+          System.out.println("Please input the command:");
           String input = in.nextLine();
           if (input.contains("x")) {
               mode = 0; //Goes back to main page if it contains x
@@ -239,20 +262,10 @@ public class Frontend {
                   String upper = in.nextLine();
                   int upperInt = Integer.parseInt(upper);
                   backend.setPriceLowerBound(upperInt);
-                  System.out.println();
                   System.out.print("Set lower bound: ");
                   String lower = in.nextLine();
                   int lowerInt = Integer.parseInt(lower);
                   backend.setPriceLowerBound(lowerInt);
-              } catch (Exception e) {
-                  //This means the input is not integer. Wrong formatted!
-                  correctInput = false;
-                  System.out.println("The format is wrong");
-              }
-          } else {
-              try {
-                  int pos = Integer.parseInt(input); //Convert it to integer
-                  pos--;
               } catch (Exception e) {
                   //This means the input is not integer. Wrong formatted!
                   correctInput = false;
@@ -275,7 +288,7 @@ public class Frontend {
         //Display room types either selected or not
         for (int i = 0; i < types.size(); i++) {
             System.out.print("(" + (i + 1) + "): " + types.get(i) + " (");
-            if (!nSelect.get(i)) {
+            if (!tSelect.get(i)) {
                 System.out.print("not selected");
             } else {
                 System.out.print("already selected");
@@ -300,11 +313,11 @@ public class Frontend {
                         System.out.println("Data Out of Range");
                     } else {
                         if (tSelect.get(pos) == false) {
-                            tSelect.set(pos, true); //Set neighborhood to true
-                            backend.selectRoomType(types.get(pos)); //Add that neighborhood for backend
+                            tSelect.set(pos, true); //Set room type to true
+                            backend.selectRoomType(types.get(pos)); //Add that room type for backend
                         } else {
-                            nSelect.set(pos, false); //Set this genre to false
-                            backend.unselectRoomType(types.get(pos)); //Remove that neighborhood from backend
+                            tSelect.set(pos, false); //Set rom type to false
+                            backend.unselectRoomType(types.get(pos)); //Remove that room type from backend
                         }
                     }
                 } catch (Exception e) {
@@ -316,7 +329,6 @@ public class Frontend {
                 mode = 0; //Goes back to main page if it contains x
             }
         }
-        
         //Use run() to navigate to another/same page
         run();
     }
