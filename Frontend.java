@@ -37,7 +37,7 @@ public class Frontend {
     public static void main(String[] args) {
 	Object frontend =  new Frontend();
 	try {
-	    FileReader inputFileReader = new FileReader("/Users/yuxizheng/Downloads/airbnb.csv");
+	    FileReader inputFileReader = new FileReader("airbnb.csv");
 	    ((Frontend)frontend).run(new Backend(inputFileReader));
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -402,7 +402,7 @@ public class Frontend {
                 	toWrite[6] = in.nextLine();
                 	Integer.parseInt(toWrite[6]); //test whether input input
                 	RoomDataReader readerToWrite = new RoomDataReader();
-                	FileWriter roomWriter = new FileWriter("/Users/yuxizheng/Downloads/airbnb.csv",true);
+                	FileWriter roomWriter = new FileWriter("airbnb.csv",true);
                 	readerToWrite.addRoom(roomWriter, toWrite);
                 	afterAddPage(toWrite);
 		    } catch (Exception e) {
