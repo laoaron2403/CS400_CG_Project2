@@ -111,6 +111,14 @@ public class Backend implements BackendInterface {
     public List<Integer> getPriceRange() {
         return bound; //lowest at .get(0) highest at .get(1)
     }
+    
+    /**
+     * This method return lowest-highest bound set by user
+     * @return list of integer lowest at .get(0) highest at .get(1)
+     */
+    public List<Integer> getCurrentPriceRange() {
+        return currentBound;
+    }
 
     /**
      * This method update lower bound that we use for making currentList (list of room) to present to user
