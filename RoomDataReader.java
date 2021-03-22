@@ -96,4 +96,31 @@ public class RoomDataReader implements RoomDataReaderInterface{
         //return the list of rooms
         return rooms;
 	}
+	/**
+	 * This method adds new room to the csv file
+	 * @param roomWriter is the FileWriter that write new room data to the original csv file
+	 * @param newRoom contains the seven properties of the new room
+	 * @return
+	 */
+	@Override
+	public boolean addRoom(FileWriter roomWriter, String[] newRoom)
+	{
+		//check if the format of the data is correct
+		if(newRoom.length != 7)
+			return false;
+		try {
+			//add every property of the room with comma and space to the csv file
+			for(int i = 0; i < newRoom.length-1; i++)
+			{
+				roomWriter.write(newRoom[i] + ", ");
+			}
+			//add the last property (the price) to the file and a new line to the csv file
+			roomWriter.write(newRoom[newRoom.length-1] + "\n");
+			roomWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 }
