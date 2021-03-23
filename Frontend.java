@@ -257,7 +257,7 @@ public class Frontend {
         System.out.println("Please select the price range by typing number according to neighborhood.");
         
         //Display price ranges either selected or not
-        System.out.println("The current price bound is: " + backend.getCurrentPriceRange().get(0) + "$ - " + backend.getPriceRange().get(1) + "$");
+        System.out.println("The current price bound is: " + backend.getCurrentPriceRange().get(0) + "$ - " + backend.getCurrentPriceRange().get(1) + "$");
         System.out.println("----------------------------------------------");
         System.out.println("Press s to set upper bound and lower bound of price range.");
         System.out.println("Press x to navigate back to main page.");
